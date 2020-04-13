@@ -46,6 +46,17 @@ class ContainerViewController: UIViewController {
         centerNavigationController.view.addGestureRecognizer(panGestureRecognizer)
     }
     
+    func configureSide(){
+        if leftViewController == nil{
+            //add menu controller here
+            leftViewController = SidePanelViewController()
+            leftViewController?.delegate = self as? sidePanelViewControllerDelegate
+            view.insertSubview(leftViewController!.view, at: 0)
+            addChild(leftViewController!)
+            leftViewController!.didMove(toParent: self)
+        }
+    }
+    
     func showShadowForCenterView(_ shouldShowShadow: Bool){
         if shouldShowShadow{
             centerNavigationController.view.layer.shadowOpacity = 0.8
@@ -71,12 +82,12 @@ extension ContainerViewController: CenterViewControllerDelegate {
   
   func addLeftPanelViewController() {
     guard leftViewController == nil else { return }
-//
-//    if let vc = UIStoryboard.leftViewController() {
-//      vc.animals = Animal.allCats()
-//      addChildSidePanelController(vc)
-//      leftViewController = vc
-//    }
+    configureSide()
+    if let vc = leftViewController {
+        
+      addChildSidePanelController(vc)
+      leftViewController = vc
+    }
   }
   
   func animateLeftPanel(shouldExpand: Bool) {
@@ -114,11 +125,12 @@ extension ContainerViewController: CenterViewControllerDelegate {
   }
   
   func addChildSidePanelController(_ sidePanelController: SidePanelViewController) {
-    sidePanelController.delegate = centerViewController as! sidePanelViewControllerDelegate
+    sidePanelController.delegate = centerViewController
     view.insertSubview(sidePanelController.view, at: 0)
-    
+
     addChild(sidePanelController)
     sidePanelController.didMove(toParent: self)
+
   }
   
   func showShadowForCenterViewController(_ shouldShowShadow: Bool) {

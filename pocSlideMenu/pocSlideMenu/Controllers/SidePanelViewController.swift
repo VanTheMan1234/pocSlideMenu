@@ -64,3 +64,7 @@ extension SidePanelViewController: UITableViewDelegate, UITableViewDataSource{
     
 }
 
+protocol SidePanelViewControllerDelegate {
+   func handleMenuToggle(forMenuOption menuOption: MenuModel?)
+}
+
